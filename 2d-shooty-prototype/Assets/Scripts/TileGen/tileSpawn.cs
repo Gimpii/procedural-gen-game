@@ -53,7 +53,7 @@ public class tileSpawn : MonoBehaviour
                 groundMap.SetTile(new Vector3Int(x, y, -15), groundTile);
             }
         }
-        GameObject.Find("Main Camera").transform.position = new Vector3(tilemapSize / 2, tilemapSize / 2, -20); //centre the camera
+        //GameObject.Find("Main Camera").transform.position = new Vector3(tilemapSize / 2, tilemapSize / 2, -20); //centre the camera
 
     }
 

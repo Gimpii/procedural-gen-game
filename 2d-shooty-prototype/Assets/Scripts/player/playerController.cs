@@ -10,12 +10,11 @@ public class playerController : MonoBehaviour
     void Start()
     {
         
-        
     }
 
     void Update()
     {
-        move();
+        //move();
     }
 
     private void move()

@@ -7,16 +7,14 @@ using UnityEngine.UI;
 
 public class tileSpawn : MonoBehaviour
 {
-    [SerializeField] private int clusterSize, clusterAmount, clusterRandomness, minClusterSize;
+    [SerializeField] private int clusterAmount;
     [SerializeField] private Tilemap groundMap, wallMap;
     [SerializeField] private Tile groundTile, wallTile;
     [SerializeField] private Camera cam;
     [SerializeField] private Button refreshBtn;
     [SerializeField] private InputField inpMapSize, inpSeed;
-    [SerializeField] private Slider wallDensityVal;
+    [SerializeField] private Slider wallDensityVal, wallSizeVal;
     private string seedInp;
-
-
     public void Awake()
     {
         inpMapSize.text = "100";
@@ -25,20 +23,7 @@ public class tileSpawn : MonoBehaviour
         cam.orthographicSize = 300;
         cam.transform.position = new Vector3(0 + mapS / 2, 0 + mapS / 2, -10);
         refresh();
-
-        //GameObject.Find("PLAYER").transform.position = new Vector3(mapS / 2, mapS / 2, -5); //Place player in the centre of map
-
-        /*int posx = Mathf.RoundToInt(GameObject.Find("PLAYER").transform.position.x);
-        int posy = Mathf.RoundToInt(GameObject.Find("PLAYER").transform.position.y);
-        for (int y = posy - 20; y < posy + 20; y++) //NTS: scale tile deletion with mapsizGamee later
-        {
-            for (int x = posx - 20; x < posx + 20; x++)
-            {
-                wallMap.SetTile(new Vector3Int(x, y, 1), null);
-            }
-        }*/
     }
-
     public void mapSizeSubmit()
     {
         if (string.IsNullOrWhiteSpace(inpMapSize.text) || int.Parse(inpMapSize.text) < 100)
@@ -48,7 +33,6 @@ public class tileSpawn : MonoBehaviour
     }
     public void ReadStringInput(string s)
     {
-        
         if (string.IsNullOrEmpty(s))
         {
             Random.InitState((int)System.DateTime.Now.Ticks);
@@ -61,8 +45,6 @@ public class tileSpawn : MonoBehaviour
             refresh();
         }
     }
-
-
     void onClick()
     {
         if (string.IsNullOrWhiteSpace(inpMapSize.text) || int.Parse(inpMapSize.text) < 100)
@@ -80,7 +62,6 @@ public class tileSpawn : MonoBehaviour
         {
             Random.InitState(int.Parse(inpSeed.text));
         }
-        
         refresh();
     }
     void refresh()
@@ -95,11 +76,6 @@ public class tileSpawn : MonoBehaviour
             genCluster();
         }
     }
-
-    public void Update()
-    {
-
-    }
     public void genTilemap() //simple algorithm to generate the ground
     {
         
@@ -111,14 +87,10 @@ public class tileSpawn : MonoBehaviour
                 groundMap.SetTile(new Vector3Int(x, y, -15), groundTile);
             }
         }
-        
         GameObject.Find("Player Camera").transform.position = new Vector3(mapS / 2, mapS / 2, -20); //centre the camera
-
     }
-
     public void genBorder()
     {
-        
         int mapS = int.Parse(inpMapSize.text);
         int Rand = Mathf.RoundToInt(Random.Range(1, 7));
         for (int i = 0; i < mapS; i++) //Gen left border
@@ -137,7 +109,6 @@ public class tileSpawn : MonoBehaviour
                 wallMap.SetTile(new Vector3Int(o, i, 1), wallTile);
             }
         }
-        
         Rand = Mathf.RoundToInt(Random.Range(1, 7));
         for (int i = 0; i < mapS; i++) //Gen right border
         {
@@ -155,7 +126,6 @@ public class tileSpawn : MonoBehaviour
                 wallMap.SetTile(new Vector3Int(o + mapS - 1, i, 1), wallTile);
             }
         }
-        
         Rand = Mathf.RoundToInt(Random.Range(1, 7));
         for (int o = 0; o < mapS; o++) //Gen top border
         {
@@ -173,7 +143,6 @@ public class tileSpawn : MonoBehaviour
                 wallMap.SetTile(new Vector3Int(o, i, 1), wallTile);
             }
         }
-
         Rand = Mathf.RoundToInt(Random.Range(1, 7));
         for (int o = 0; o < mapS; o++) //Gen bottom border
         {
@@ -193,20 +162,18 @@ public class tileSpawn : MonoBehaviour
         }
 
     }
-
     public void genCluster()
     {
         int mapS = int.Parse(inpMapSize.text);
         int initPosx = Mathf.RoundToInt(Random.Range(0, mapS - 1));
         int initPosy = Mathf.RoundToInt(Random.Range(0, mapS - 1));
-        int maxW = Mathf.RoundToInt(Random.Range(minClusterSize, clusterSize));
-        int maxH = Mathf.RoundToInt(Random.Range(minClusterSize, clusterSize));
+        int maxW = Mathf.RoundToInt(Random.Range(8, Mathf.Pow(int.Parse(inpMapSize.text), 0.65f) * wallSizeVal.value));
+        int maxH = Mathf.RoundToInt(Random.Range(8, Mathf.Pow(int.Parse(inpMapSize.text), 0.65f) * wallSizeVal.value)); ;
         int initW = maxW;
         int initH = maxH;
-
         for (int i = 0; i < maxH; i++) //Generation for the 1st quartile
         {
-            maxW = maxW + Mathf.RoundToInt(Random.Range(-clusterRandomness, clusterRandomness));
+            maxW = maxW + Random.Range(-1, 1);
             if (i + initPosy < mapS)
             {
                 for (int o = 0; o < maxW; o++)
@@ -220,10 +187,9 @@ public class tileSpawn : MonoBehaviour
         }
         maxW = initW;
         maxH = initH;
-
         for (int i = 0; i < maxH; i++) //Generation for the 2nd quartile
         {
-            maxW = maxW + Mathf.RoundToInt(Random.Range(-clusterRandomness, clusterRandomness));
+            maxW = maxW + Random.Range(-1, 1);
             if (i + initPosy < mapS)
             {
                 for (int o = -1; o > -maxW - 1; o--)
@@ -237,10 +203,9 @@ public class tileSpawn : MonoBehaviour
         }
         maxW = initW;
         maxH = initH;
-
         for (int i = 0; i > -maxH; i--) //Generation for the 3rd quartile
         {
-            maxW = maxW + Mathf.RoundToInt(Random.Range(-clusterRandomness, clusterRandomness));
+            maxW = maxW + Random.Range(-1, 1);
             if (i + initPosy >= 0)
             {
                 for (int o = -1; o > -maxW - 1; o--)
@@ -254,10 +219,9 @@ public class tileSpawn : MonoBehaviour
         }
         maxW = initW;
         maxH = initH;
-
         for (int i = 0; i > -maxH; i--) //Generation for the 4th quartile
         {
-            maxW = maxW + Mathf.RoundToInt(Random.Range(-clusterRandomness, clusterRandomness));
+            maxW = maxW + Random.Range(-1, 1);
             if (i + initPosy >= 0)
             {
                 for (int o = 0; o < maxW; o++)

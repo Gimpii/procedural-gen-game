@@ -1210,8 +1210,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1645472923}
-        m_TargetAssemblyTypeName: genManager, Assembly-CSharp
+      - m_Target: {fileID: 1513208567}
+        m_TargetAssemblyTypeName: playerController, Assembly-CSharp
         m_MethodName: buttonBegin
         m_Mode: 1
         m_Arguments:
@@ -1929,7 +1929,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!212 &1513208565
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2008,6 +2008,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
+  tileGenUI: {fileID: 1115098273}
+  cam: {fileID: 519420031}
+  player: {fileID: 1513208564}
 --- !u!1 &1607209294
 GameObject:
   m_ObjectHideFlags: 0
@@ -2203,8 +2206,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   genbtn: {fileID: 1844822300}
   genseed: {fileID: 1026001236}
-  tileGenUI: {fileID: 1115098273}
-  cam: {fileID: 519420031}
 --- !u!1 &1678721883
 GameObject:
   m_ObjectHideFlags: 0

@@ -97,13 +97,9 @@ public class tileSpawn : MonoBehaviour
         {
             Rand = Rand + Mathf.RoundToInt(Random.Range(-5, 5)/3); //random values divided by 3 to get some slightly smoother looking borders
             if (Rand < 5)
-            {
                 Rand = 5;
-            }
             if (Rand > 10)
-            {
                 Rand = 10;
-            }
             for (int o = 0; o < Rand; o++)
             {
                 wallMap.SetTile(new Vector3Int(o, i, 1), wallTile);
@@ -112,15 +108,11 @@ public class tileSpawn : MonoBehaviour
         Rand = Mathf.RoundToInt(Random.Range(1, 7));
         for (int i = 0; i < mapS; i++) //Gen right border
         {
-            Rand = Rand + Mathf.RoundToInt(Random.Range(-5, 5) / 3); 
+            Rand = Rand + Mathf.RoundToInt(Random.Range(-5, 5) / 3);
             if (Rand < 5)
-            {
                 Rand = 5;
-            }
             if (Rand > 10)
-            {
                 Rand = 10;
-            }
             for (int o = 0; o > -Rand; o--)
             {
                 wallMap.SetTile(new Vector3Int(o + mapS - 1, i, 1), wallTile);
@@ -131,13 +123,9 @@ public class tileSpawn : MonoBehaviour
         {
             Rand = Rand + Mathf.RoundToInt(Random.Range(-5, 5) / 3);
             if (Rand < 5)
-            {
                 Rand = 5;
-            }
             if (Rand > 10)
-            {
                 Rand = 10;
-            }
             for (int i = 0; i < Rand; i++)
             {
                 wallMap.SetTile(new Vector3Int(o, i, 1), wallTile);
@@ -148,13 +136,9 @@ public class tileSpawn : MonoBehaviour
         {
             Rand = Rand + Mathf.RoundToInt(Random.Range(-5, 5) / 3);
             if (Rand < 5)
-            {
                 Rand = 5;
-            }
             if (Rand > 10)
-            {
                 Rand = 10;
-            }
             for (int i = 0; i > -Rand; i--)
             {
                 wallMap.SetTile(new Vector3Int(o, i + mapS - 1, 1), wallTile);

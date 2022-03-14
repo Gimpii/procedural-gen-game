@@ -21,7 +21,7 @@ public class tileSpawn : MonoBehaviour
         int mapS = int.Parse(inpMapSize.text);
         refreshBtn.GetComponent<Button>().onClick.AddListener(onClick);
         cam.orthographicSize = 300;
-        cam.transform.position = new Vector3(0 + mapS / 2, 0 + mapS / 2, -10);
+        cam.transform.position = new Vector3(0 + mapS / 2, 0 + mapS / 2, -20);
         refresh();
     }
     public void mapSizeSubmit()

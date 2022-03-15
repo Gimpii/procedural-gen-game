@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class playerController : MonoBehaviour
 {
-    [SerializeField] private int speed;
+    [SerializeField] private float speed, globalSpeed;
     [SerializeField] private Canvas tileGenUI;
     [SerializeField] private Camera cam;
     [SerializeField] private GameObject player;
@@ -25,6 +25,10 @@ public class playerController : MonoBehaviour
     }
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            StartCoroutine("dash");
+        }
         if (isCamZoom == true)
         {
             cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, 30, 0.01f);
@@ -40,6 +44,16 @@ public class playerController : MonoBehaviour
         }
     }
 
+    IEnumerator dash()
+    {
+        speed = 100;
+        for (int i = 0; i < 10; i++)
+        {
+            speed = speed * 0.870551f;
+            yield return new WaitForSeconds(0.02f);
+        }
+        speed = 25;
+    }
     private void movePlayer()
     {
         float xVel = 0f;
@@ -64,8 +78,8 @@ public class playerController : MonoBehaviour
 
         Vector3 movement = new Vector3(xVel, yVel).normalized; 
 
-        Vector3 targetMove = transform.position + movement * speed * Time.deltaTime; //the position the player will move to
-        RaycastHit2D detect = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 1), movement, speed * Time.deltaTime); //Send a ray from position in direction of movement to detect any object with collider
+        Vector3 targetMove = transform.position + movement * globalSpeed * speed * Time.deltaTime; //the position the player will move to
+        RaycastHit2D detect = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 1), movement, globalSpeed * speed * Time.deltaTime); //Send a ray from position in direction of movement to detect any object with collider
         if (detect.collider == null) //Nothing hit
         {
             transform.position = targetMove;
@@ -73,18 +87,18 @@ public class playerController : MonoBehaviour
         else
         {
             Vector3 testPos = new Vector3(movement.x, 0f).normalized;
-            targetMove = transform.position + testPos * speed * 0.75f * Time.deltaTime;
-            detect = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 1), testPos, speed * Time.deltaTime);
-            if(detect.collider == null)//Nothing next to character on horizontal
+            targetMove = transform.position + testPos * globalSpeed * speed * 0.75f * Time.deltaTime;
+            detect = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 1), testPos, globalSpeed * speed * Time.deltaTime);
+            if(testPos.x != 0f && detect.collider == null)//Nothing next to character on horizontal
             {
                 transform.position = targetMove;
             }
             else
             {
                 testPos = new Vector3(0f, movement.y).normalized;
-                targetMove = transform.position + testPos * speed * 0.75f * Time.deltaTime;
-                detect = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 1), testPos, speed * Time.deltaTime);
-                if (detect.collider == null)//Nothing next to character on vertical
+                targetMove = transform.position + testPos * speed * globalSpeed * 0.75f * Time.deltaTime;
+                detect = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y - 1), testPos, globalSpeed * speed * Time.deltaTime);
+                if (testPos.y != 0f && detect.collider == null)//Nothing next to character on vertical
                 {
                     transform.position = targetMove;
                 }

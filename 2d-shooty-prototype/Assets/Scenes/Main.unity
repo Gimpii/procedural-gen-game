@@ -2007,7 +2007,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2890203c7ce2cb4187287d21b35bc44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 30
+  speed: 25
+  globalSpeed: 0.6
   tileGenUI: {fileID: 1115098273}
   cam: {fileID: 519420031}
   player: {fileID: 1513208564}

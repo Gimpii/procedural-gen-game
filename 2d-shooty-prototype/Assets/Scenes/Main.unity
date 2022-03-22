@@ -2012,6 +2012,8 @@ MonoBehaviour:
   tileGenUI: {fileID: 1115098273}
   cam: {fileID: 519420031}
   player: {fileID: 1513208564}
+  wallTile: {fileID: 11400000, guid: 921a81b1c98a61d4f902baba6a3b1e47, type: 2}
+  wallMap: {fileID: 1897907728}
   inpHolder: {fileID: 1740762455}
 --- !u!1 &1607209294
 GameObject:

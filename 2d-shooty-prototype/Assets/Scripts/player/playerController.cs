@@ -11,8 +11,11 @@ public class playerController : MonoBehaviour
     [SerializeField] private Canvas tileGenUI;
     [SerializeField] private Camera cam;
     [SerializeField] private GameObject player;
+    [SerializeField] private Tile wallTile;
+    [SerializeField] private Tilemap wallMap;
     [SerializeField] private InputField inpHolder;
 
+    bool canDash = true;
     bool isCameraFollow = false;
     bool isCamZoom = false;
     public void buttonBegin() //Hide tile generation UI On Begin
@@ -21,13 +24,23 @@ public class playerController : MonoBehaviour
         isCameraFollow = true;
         isCamZoom = true;
 
+        int offset = Mathf.RoundToInt(int.Parse(inpHolder.text) / 2);
+
         player.transform.position = new Vector3(int.Parse(inpHolder.text) / 2, int.Parse(inpHolder.text) / 2, -10); //Move player to the centre of the map
+        for (int i = -15; i < 15; i++)
+        {
+            for (int o = -15; o < 15; o++)
+            {
+                wallMap.SetTile(new Vector3Int(offset + i, offset + o, 1), null);//delete walls around player spawn
+            }
+        }
     }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine("dash");
+            if (canDash == true)
+                StartCoroutine("dash");
         }
         if (isCamZoom == true)
         {
@@ -46,13 +59,16 @@ public class playerController : MonoBehaviour
 
     IEnumerator dash()
     {
+        canDash = false;
         speed = 100;
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 16; i++)
         {
-            speed = speed * 0.870551f;
+            speed = speed * 0.917004f;
             yield return new WaitForSeconds(0.02f);
         }
         speed = 25;
+        yield return new WaitForSeconds(0.6f);
+        canDash = true;
     }
     private void movePlayer()
     {

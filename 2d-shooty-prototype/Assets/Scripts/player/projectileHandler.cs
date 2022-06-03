@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class projectileHandler : MonoBehaviour
 {
-    [SerializeField] GameObject projectile;
+    [SerializeField] Transform projectile, player;
     [SerializeField] private Button inpHolder;
+    [SerializeField] Vector3 mousepos, bulletDirection;
     private bool shootEnabled = false;
 
     public void buttonBegin()
@@ -15,16 +16,45 @@ public class projectileHandler : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0) && shootEnabled == true)
+        if (Input.GetKeyDown(KeyCode.DownArrow) && shootEnabled == true)
         {
-            transform.LookAt(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
-            StartCoroutine(spawnProjectile());
+            StartCoroutine(spawnProjectile("down"));
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow) && shootEnabled == true)
+        {
+            StartCoroutine(spawnProjectile("up"));
+        }
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && shootEnabled == true)
+        {
+            StartCoroutine(spawnProjectile("left"));
+        }
+        if (Input.GetKeyDown(KeyCode.RightArrow) && shootEnabled == true)
+        {
+            StartCoroutine(spawnProjectile("right"));
         }
     }
 
-    IEnumerator spawnProjectile()
+    IEnumerator spawnProjectile(string keyPressed)
     {
-        GameObject.Instantiate(projectile, transform);
-        yield return new WaitForSeconds(1);
+        Transform bullet = Instantiate(projectile, transform.position, Quaternion.identity);
+        switch (keyPressed)
+        {
+            case "right":
+                bulletDirection = Vector2.right;
+                break;
+            case "left":
+                bulletDirection = Vector2.left;
+                break;
+            case "up":
+                bulletDirection = Vector2.up;
+                break;
+            case "down":
+                bulletDirection = Vector2.down;
+                break;
+        }
+        bullet.GetComponent<projectileBehaviour>().Setup(bulletDirection);
+        shootEnabled = false;
+        yield return new WaitForSeconds(0.4f);
+        shootEnabled = true;
     }
 }

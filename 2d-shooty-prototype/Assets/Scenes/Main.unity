@@ -1234,6 +1234,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1645472923}
+        m_TargetAssemblyTypeName: genManager, Assembly-CSharp
+        m_MethodName: Onbegin
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1065676215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1558,8 +1570,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05d5ddcec9e7cce4f99fd33dbbd38623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectile: {fileID: 626929338108069467, guid: ebdbd89901ae3e24bab83e94b5493eb7, type: 3}
+  projectile: {fileID: 7664380557364830482, guid: ebdbd89901ae3e24bab83e94b5493eb7, type: 3}
+  player: {fileID: 1513208566}
   inpHolder: {fileID: 1065676214}
+  mousepos: {x: 0, y: 0, z: 0}
+  bulletDirection: {x: 0, y: 0, z: 0}
 --- !u!4 &1192424202
 Transform:
   m_ObjectHideFlags: 0
@@ -2268,6 +2283,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   genbtn: {fileID: 1844822300}
   genseed: {fileID: 1026001236}
+  inpMapSize: {fileID: 1740762455}
+  wallTile:
+  - {fileID: 11400000, guid: 921a81b1c98a61d4f902baba6a3b1e47, type: 2}
+  wallMap: {fileID: 1897907728}
+  player: {fileID: 1513208564}
+  enemy: {fileID: 3595287490910000046, guid: f1acc595dfa47eb4985069e6e1f15802, type: 3}
 --- !u!1 &1678721883
 GameObject:
   m_ObjectHideFlags: 0
@@ -2892,7 +2913,7 @@ GameObject:
   - component: {fileID: 1897907729}
   m_Layer: 0
   m_Name: Wall
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

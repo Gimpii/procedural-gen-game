@@ -2289,6 +2289,8 @@ MonoBehaviour:
   wallMap: {fileID: 1897907728}
   player: {fileID: 1513208564}
   enemy: {fileID: 3595287490910000046, guid: f1acc595dfa47eb4985069e6e1f15802, type: 3}
+  globalEnemyMax: 4
+  currentEnemyCount: 0
 --- !u!1 &1678721883
 GameObject:
   m_ObjectHideFlags: 0

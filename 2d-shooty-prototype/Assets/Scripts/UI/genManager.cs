@@ -10,20 +10,16 @@ public class genManager : MonoBehaviour
     [SerializeField] private Button genbtn;
     [SerializeField] private InputField genseed;
     [SerializeField] private InputField inpMapSize;
-    [SerializeField] private TileBase[] wallTile;
-    [SerializeField] private Tilemap wallMap;
-    [SerializeField] private GameObject player;
     [SerializeField] private Transform enemy;
 
     private bool spwnActive = false;
     private string seed;
-    private int globalEnemyMax, currentEnemyCount;
+    public int globalEnemyMax, currentEnemyCount;
 
     private void Start()
     {
         Button genbutton = genbtn.GetComponent<Button>();
         genbutton.onClick.AddListener(onclick);
-        globalEnemyMax = 5;
     }
     void onclick()
     {
@@ -47,17 +43,18 @@ public class genManager : MonoBehaviour
 
     void Update()
     {
-        Vector3 playerpos = player.transform.position;
-
         if (currentEnemyCount < globalEnemyMax && spwnActive == true)
         {
-            spawnEnemy();
+            StartCoroutine(spawnEnemy());
         }
+        
+        
     }
-    void spawnEnemy()
+    IEnumerator spawnEnemy()
     {
         Vector3 location = new Vector3(Random.Range(0, int.Parse(inpMapSize.text)) + 0.5f, Random.Range(0, int.Parse(inpMapSize.text)) + 0.5f, -10);
         Instantiate(enemy, location, Quaternion.identity);
         currentEnemyCount += 1;
+        yield return new WaitForSeconds(0.3f);
     }
 }

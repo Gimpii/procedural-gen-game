@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -55,8 +56,24 @@ public class playerController : MonoBehaviour
             cam.transform.position = Vector3.Lerp(cam.transform.position, new Vector3(player.transform.position.x, player.transform.position.y, -20), 0.03f); 
             //Interpolates between the camera position and player position, creating a smooth camera
         }
+
+        RaycastHit2D cast = Physics2D.BoxCast(new Vector2(transform.position.x, transform.position.y), new Vector2(0.5f, 1f), 0, Vector2.zero);
+        try
+        {
+            if (cast.transform.tag == "e_bullet")
+            {
+                die();
+            }
+        }
+        catch (NullReferenceException)
+        {
+        }
     }
 
+    public void die()
+    {
+        Destroy(gameObject);
+    }
     IEnumerator dash()
     {
         canDash = false;

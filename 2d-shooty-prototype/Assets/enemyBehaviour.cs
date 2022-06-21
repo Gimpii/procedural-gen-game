@@ -38,7 +38,6 @@ public class enemyBehaviour : MonoBehaviour
         }
         
 
-
         if (projActive == true)
         {
             StartCoroutine("fire");

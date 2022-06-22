@@ -26,6 +26,7 @@ public class tileSpawn : MonoBehaviour
     }
     public void mapSizeSubmit()
     {
+        refresh();
         if (string.IsNullOrWhiteSpace(inpMapSize.text) || int.Parse(inpMapSize.text) < 100)
         {
             inpMapSize.text = "100";

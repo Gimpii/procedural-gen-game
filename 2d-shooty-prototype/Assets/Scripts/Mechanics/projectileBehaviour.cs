@@ -23,6 +23,7 @@ public class projectileBehaviour : MonoBehaviour
             if (detect.transform.gameObject.name == "Wall")
             {
                 Destroy(gameObject);
+                
             }
         }
         catch(NullReferenceException)

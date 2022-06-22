@@ -25,7 +25,7 @@ public class enemyBehaviour : MonoBehaviour
         transform.position = new Vector3(newPos.x, newPos.y, -10) + moving * Time.deltaTime * speed;
         transform.rotation = Quaternion.Euler(0f, 0f, rotation_z);
 
-        RaycastHit2D cast = Physics2D.BoxCast(new Vector2(transform.position.x, transform.position.y), new Vector2(1.2f, 1.2f), 0, Vector2.zero);
+        RaycastHit2D cast = Physics2D.BoxCast(new Vector2(transform.position.x, transform.position.y), new Vector2(1.1f, 1.1f), rotation_z, Vector2.zero);
         try
         {
             if (cast.transform.tag == "bullet")
@@ -36,7 +36,10 @@ public class enemyBehaviour : MonoBehaviour
         catch (NullReferenceException)
         {
         }
-        
+        if (GameObject.Find("PLAYER").GetComponent<playerController>().dead == true)
+        {
+            die();
+        }
 
         if (projActive == true)
         {
@@ -49,7 +52,6 @@ public class enemyBehaviour : MonoBehaviour
 
     }
 
-
     IEnumerator moveabout()
     {
         switch_ = false;
@@ -59,7 +61,7 @@ public class enemyBehaviour : MonoBehaviour
     }
     public void die()
     {
-        GameObject.Find("tileGen").GetComponent<genManager>().globalEnemyMax -= 1;
+        GameObject.Find("tileGen").GetComponent<genManager>().currentEnemyCount -= 1;
         Destroy(gameObject);
     }
 

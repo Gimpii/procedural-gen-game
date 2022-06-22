@@ -7,19 +7,29 @@ using UnityEngine.Tilemaps;
 public class genManager : MonoBehaviour
 {
 
-    [SerializeField] private Button genbtn;
+    [SerializeField] private Button genbtn, respawn;
     [SerializeField] private InputField genseed;
     [SerializeField] private InputField inpMapSize;
     [SerializeField] private Transform enemy;
+    [SerializeField] private GameObject player;
 
-    private bool spwnActive = false;
+    public bool spwnActive = false;
     private string seed;
     public int globalEnemyMax, currentEnemyCount;
 
-    private void Start()
+    public void Start()
     {
         Button genbutton = genbtn.GetComponent<Button>();
         genbutton.onClick.AddListener(onclick);
+    }
+
+    public void Onreset()
+    {
+        GameObject.Find("PLAYER").GetComponent<playerController>().dead = false;
+        player.GetComponent<SpriteRenderer>().enabled = true;
+        respawn.gameObject.SetActive(false);
+        spwnActive = true;
+        player.transform.position = new Vector3(int.Parse(inpMapSize.text) / 2, int.Parse(inpMapSize.text) / 2, -10);
     }
     void onclick()
     {
@@ -48,13 +58,12 @@ public class genManager : MonoBehaviour
             StartCoroutine(spawnEnemy());
         }
         
-        
     }
     IEnumerator spawnEnemy()
     {
+        currentEnemyCount += 1;
+        yield return new WaitForSeconds(Random.Range(1.5f, 3));
         Vector3 location = new Vector3(Random.Range(0, int.Parse(inpMapSize.text)) + 0.5f, Random.Range(0, int.Parse(inpMapSize.text)) + 0.5f, -10);
         Instantiate(enemy, location, Quaternion.identity);
-        currentEnemyCount += 1;
-        yield return new WaitForSeconds(0.3f);
     }
 }

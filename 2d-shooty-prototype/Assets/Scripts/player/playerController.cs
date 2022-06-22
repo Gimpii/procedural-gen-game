@@ -15,10 +15,17 @@ public class playerController : MonoBehaviour
     [SerializeField] private Tile wallTile;
     [SerializeField] private Tilemap wallMap;
     [SerializeField] private InputField inpHolder;
+    [SerializeField] private Button respawn;
 
+    public bool dead = false;
     bool canDash = true;
     bool isCameraFollow = false;
     bool isCamZoom = false;
+
+    void Start()
+    {
+        respawn.gameObject.SetActive(false);
+    }
     public void buttonBegin() //Hide tile generation UI On Begin
     {
         tileGenUI.gameObject.SetActive(false);
@@ -38,41 +45,48 @@ public class playerController : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if(dead == false)
         {
-            if (canDash == true)
-                StartCoroutine("dash");
-        }
-        if (isCamZoom == true)
-        {
-            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, 30, 0.01f);
-            //Interpolates between current camera orthographic size and the target orthographic size
-            if (cam.orthographicSize == 30)
-                isCamZoom = false;
-        }
-        if (isCameraFollow == true)
-        {
-            movePlayer();
-            cam.transform.position = Vector3.Lerp(cam.transform.position, new Vector3(player.transform.position.x, player.transform.position.y, -20), 0.03f); 
-            //Interpolates between the camera position and player position, creating a smooth camera
-        }
-
-        RaycastHit2D cast = Physics2D.BoxCast(new Vector2(transform.position.x, transform.position.y), new Vector2(0.5f, 1f), 0, Vector2.zero);
-        try
-        {
-            if (cast.transform.tag == "e_bullet")
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                die();
+                if (canDash == true)
+                    StartCoroutine("dash");
+            }
+            if (isCamZoom == true)
+            {
+                cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, 30, 0.01f);
+                //Interpolates between current camera orthographic size and the target orthographic size
+                if (cam.orthographicSize == 30)
+                    isCamZoom = false;
+            }
+            if (isCameraFollow == true)
+            {
+                movePlayer();
+                cam.transform.position = Vector3.Lerp(cam.transform.position, new Vector3(player.transform.position.x, player.transform.position.y, -20), 0.03f);
+                //Interpolates between the camera position and player position, creating a smooth camera
+            }
+
+            RaycastHit2D cast = Physics2D.BoxCast(new Vector2(transform.position.x, transform.position.y), new Vector2(0.5f, 1f), 0, Vector2.zero);
+            try
+            {
+                if (cast.transform.tag == "e_bullet")
+                {
+                    respawn.gameObject.SetActive(true);
+                    die();
+                }
+            }
+            catch (NullReferenceException)
+            {
             }
         }
-        catch (NullReferenceException)
-        {
-        }
+        
     }
 
     public void die()
     {
-        Destroy(gameObject);
+        GameObject.Find("tileGen").GetComponent<genManager>().spwnActive = false;
+        player.GetComponent<SpriteRenderer>().enabled = false;
+        dead = true;
     }
     IEnumerator dash()
     {

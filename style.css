@@ -1,0 +1,34 @@
+body {
+    background-color: #021a11;
+    color: #a6dec9;
+    font-family: Verdana, sans-serif;
+}
+h1 {
+    color: #a6dec9;
+    font-family: 'monaco', monospace;
+}
+
+h2 {
+    color: #a6dec9;
+    font-family: 'monaco', monospace;
+}
+
+img {
+    border: 10px solid #a6dec9;
+}
+
+input {
+    color: #a6dec9;
+    background: #207354;
+    border: 3px solid #a6dec9;
+}
+textarea {
+    color: #a6dec9;
+    background: #207354;
+    border: 3px solid #a6dec9;
+}
+select {
+    color: #a6dec9;
+    background: #207354;
+    border: 3px solid #a6dec9;
+}

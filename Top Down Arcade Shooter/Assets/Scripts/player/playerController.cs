@@ -24,7 +24,7 @@ public class playerController : MonoBehaviour
 
     void Start()
     {
-        respawn.gameObject.SetActive(false);
+        respawn.gameObject.SetActive(false); //Respawn button disabled by default
     }
     public void buttonBegin() //Hide tile generation UI On Begin
     {
@@ -45,7 +45,7 @@ public class playerController : MonoBehaviour
     }
     void Update()
     {
-        if(dead == false)
+        if(dead == false) //Only allows controls if the player is alive
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
@@ -66,10 +66,10 @@ public class playerController : MonoBehaviour
                 //Interpolates between the camera position and player position, creating a smooth camera
             }
 
-            RaycastHit2D cast = Physics2D.BoxCast(new Vector2(transform.position.x, transform.position.y), new Vector2(0.5f, 1f), 0, Vector2.zero);
+            RaycastHit2D cast = Physics2D.BoxCast(new Vector2(transform.position.x, transform.position.y), new Vector2(0.5f, 1f), 0, Vector2.zero); //Hitbox for the player
             try
             {
-                if (cast.transform.tag == "e_bullet")
+                if (cast.transform.tag == "e_bullet") //If touching an enemy bullet, player dies
                 {
                     respawn.gameObject.SetActive(true);
                     die();

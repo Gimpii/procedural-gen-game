@@ -20,40 +20,39 @@ public class genManager : MonoBehaviour
     public void Start()
     {
         Button genbutton = genbtn.GetComponent<Button>();
-        genbutton.onClick.AddListener(onclick);
+        genbutton.onClick.AddListener(onclick); //Sets up the generate map button to run when clicked
     }
 
-    public void Onreset()
+    public void Onreset() //Is run when the respawn button is clicked
     {
         GameObject.Find("PLAYER").GetComponent<playerController>().dead = false;
-        player.GetComponent<SpriteRenderer>().enabled = true;
-        respawn.gameObject.SetActive(false);
-        spwnActive = true;
-        player.transform.position = new Vector3(int.Parse(inpMapSize.text) / 2, int.Parse(inpMapSize.text) / 2, -10);
+        player.GetComponent<SpriteRenderer>().enabled = true; //character shown
+        respawn.gameObject.SetActive(false); //respawn button is hidden
+        spwnActive = true; //enemies can spawn
+        player.transform.position = new Vector3(int.Parse(inpMapSize.text) / 2, int.Parse(inpMapSize.text) / 2, -10); //spawn player at centre of map
     }
-    void onclick()
+    void onclick() //Button for radndomizing seed
     {
-        Random.InitState((int)System.DateTime.Now.Ticks);
+        Random.InitState((int)System.DateTime.Now.Ticks); //Set internal seed to the current time in ticks
         seed = "";
         for (int i = 0; i < 8; i++)
         {
-            seed = seed + Random.Range(0, 10);
+            seed = seed + Random.Range(0, 10); //set seed to 8 random integers
         }
         genseed.text = seed;
-        int b = seed.GetHashCode();
-        print(b);
-        Random.InitState(b);
+        int b = seed.GetHashCode(); //convert seed to its hash code
+        Random.InitState(b); //Set internal seed to the randomised seed
     }
     
-    public void Onbegin()
+    public void Onbegin() //Runs when begin button clicked
     {
-        spwnActive = true;
-        currentEnemyCount = 0;
+        spwnActive = true; //Enemies can spawn
+        currentEnemyCount = 0; //Enemies default count set to 0
     }
 
     void Update()
     {
-        if (currentEnemyCount < globalEnemyMax && spwnActive == true)
+        if (currentEnemyCount < globalEnemyMax && spwnActive == true) //Only runs if enemies on the map is less than the maximum
         {
             StartCoroutine(spawnEnemy());
         }
@@ -61,9 +60,9 @@ public class genManager : MonoBehaviour
     }
     IEnumerator spawnEnemy()
     {
-        currentEnemyCount += 1;
+        currentEnemyCount += 1; //increments enemy count by 1
         yield return new WaitForSeconds(Random.Range(1.5f, 3));
-        Vector3 location = new Vector3(Random.Range(0, int.Parse(inpMapSize.text)) + 0.5f, Random.Range(0, int.Parse(inpMapSize.text)) + 0.5f, -10);
-        Instantiate(enemy, location, Quaternion.identity);
+        Vector3 location = new Vector3(Random.Range(0, int.Parse(inpMapSize.text)) + 0.5f, Random.Range(0, int.Parse(inpMapSize.text)) + 0.5f, -10); 
+        Instantiate(enemy, location, Quaternion.identity); //spawns an enemy gameobject somewhere on the map
     }
 }

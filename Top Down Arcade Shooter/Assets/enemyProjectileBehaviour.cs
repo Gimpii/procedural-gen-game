@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class enemyProjectileBehaviour : MonoBehaviour
@@ -10,28 +9,26 @@ public class enemyProjectileBehaviour : MonoBehaviour
     [SerializeField] private float speed;
     bool die = false;
 
-    public void Setup()
+    public void Setup() //Is run when an Enemy calls for a projectile to spawn
     {
         playerPos = GameObject.Find("PLAYER").transform.position;
         diff = playerPos - transform.position;
-        float angle = Mathf.Atan2(diff.x, diff.y);
-        direction = new Vector2(Mathf.Sin(angle) + Random.Range(-0.1f, 0.1f), Mathf.Cos(angle) + Random.Range(-0.1f,0.1f)).normalized;
+        float angle = Mathf.Atan2(diff.x, diff.y); //Trigonometry to find angle between enemy and player
+        direction = new Vector2(Mathf.Sin(angle) + Random.Range(-0.1f, 0.1f), Mathf.Cos(angle) + Random.Range(-0.1f,0.1f)).normalized; //Direction toward player with slight randomness in angle
     }
     private void Update()
     {
-        
-        transform.position += direction * speed * Time.deltaTime;
-        if (die == false)
+        transform.position += direction * speed * Time.deltaTime; //Bullet will move in a single direction each frame
+        if (die == false) //To ensure coroutine is not run continuously throughout the liftime of the bullet
         {
             StartCoroutine("destroy");
         }
-        //RaycastHit2D detect = Physics2D.Raycast(new Vector2(transform.position.x, transform.position.y), direction, 0.01f);
     }
 
     IEnumerator destroy()
     {
         die = true;
-        yield return new WaitForSeconds(8);
-        Destroy(gameObject);
+        yield return new WaitForSeconds(8);//wait 8 seconds
+        Destroy(gameObject); //Remove this instance of the gameobject and its scripts from the game
     }
 }

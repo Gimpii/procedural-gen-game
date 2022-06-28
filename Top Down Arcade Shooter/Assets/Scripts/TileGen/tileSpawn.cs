@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class tileSpawn : MonoBehaviour
 {
+    //maily references to unity gameobjects
     [SerializeField] private int clusterAmount;
     [SerializeField] private Tilemap groundMap, wallMap;
     [SerializeField] private Tile groundTile, wallTile;
@@ -15,45 +16,46 @@ public class tileSpawn : MonoBehaviour
     [SerializeField] private InputField inpMapSize, inpSeed;
     [SerializeField] private Slider wallDensityVal, wallSizeVal;
     private string seedInp;
+
     public void Awake()
     {
-        inpMapSize.text = "100";
+        inpMapSize.text = "100"; //default map size
         int mapS = int.Parse(inpMapSize.text);
         refreshBtn.GetComponent<Button>().onClick.AddListener(onClick);
-        cam.orthographicSize = 300;
-        cam.transform.position = new Vector3(0 + mapS / 2, 0 + mapS / 2, -20);
-        refresh();
+        cam.orthographicSize = 300; //default camera zoom
+        cam.transform.position = new Vector3(0 + mapS / 2, 0 + mapS / 2, -20); //centre the camera
+        refresh(); //default map generation (randomised but using default settings)
     }
-    public void mapSizeSubmit()
+    public void mapSizeSubmit() //runs when player submits map size
     {
-        refresh();
-        if (string.IsNullOrWhiteSpace(inpMapSize.text) || int.Parse(inpMapSize.text) < 100)
+        refresh(); //refresh map
+        if (string.IsNullOrWhiteSpace(inpMapSize.text) || int.Parse(inpMapSize.text) < 100) //defaults map size to 100 if player wrote nothing or something less than 100
         {
             inpMapSize.text = "100";
         }
     }
-    public void ReadStringInput(string s)
+    public void ReadStringInput(string s) //Sets the seed to the string entered in the seed input box
     {
-        if (string.IsNullOrEmpty(s))
+        if (string.IsNullOrEmpty(s)) //Make sure input isn't empty
         {
-            Random.InitState((int)System.DateTime.Now.Ticks);
+            Random.InitState((int)System.DateTime.Now.Ticks); //will default to the system time in ticks as the seed
             refresh();
         }
         else
         {
             seedInp = s;
-            Random.InitState(int.Parse(s));
+            Random.InitState(int.Parse(s)); //set seed to the input
             refresh();
         }
     }
-    void onClick()
+    void onClick() //Runs when player unfocuses the map size box 
     {
         if (string.IsNullOrWhiteSpace(inpMapSize.text) || int.Parse(inpMapSize.text) < 100)
         {
             inpMapSize.text = "100";
         }
     }
-    public void UIrefresh()
+    public void UIrefresh() //Refresh map button (Top Left of the screen)
     {
         if (string.IsNullOrWhiteSpace(inpSeed.text))
         {
@@ -65,13 +67,14 @@ public class tileSpawn : MonoBehaviour
         }
         refresh();
     }
-    void refresh()
+
+    void refresh() //regenerates the map
     {
-        wallMap.ClearAllTiles();
-        groundMap.ClearAllTiles();
+        wallMap.ClearAllTiles(); 
+        groundMap.ClearAllTiles(); //clear all tiles
         genTilemap();
         genBorder();
-        clusterAmount = Mathf.RoundToInt(Mathf.Pow(int.Parse(inpMapSize.text), 2/3f) * wallDensityVal.value);
+        clusterAmount = Mathf.RoundToInt(Mathf.Pow(int.Parse(inpMapSize.text), 2/3f) * wallDensityVal.value); //Amount of wall clusters is equal to the map size to the power of 2/3, multiplied by the wall density
         for (int a = 0; a < clusterAmount; a++)
         {
             genCluster();
@@ -100,7 +103,7 @@ public class tileSpawn : MonoBehaviour
             if (Rand < 5)
                 Rand = 5;
             if (Rand > 10)
-                Rand = 10;
+                Rand = 10; //Doesnt generate inner walls larger or smaller than these values
             for (int o = 0; o < Rand; o++)
             {
                 wallMap.SetTile(new Vector3Int(o, i, 1), wallTile);
@@ -147,25 +150,27 @@ public class tileSpawn : MonoBehaviour
         }
 
     }
-    public void genCluster()
+    public void genCluster() //Generates a group of walls 
     {
         int mapS = int.Parse(inpMapSize.text);
         int initPosx = Mathf.RoundToInt(Random.Range(0, mapS - 1));
-        int initPosy = Mathf.RoundToInt(Random.Range(0, mapS - 1));
+        int initPosy = Mathf.RoundToInt(Random.Range(0, mapS - 1)); //Initial positions of the centre of the wall cluster
         int maxW = Mathf.RoundToInt(Random.Range(8, Mathf.Pow(int.Parse(inpMapSize.text), 0.65f) * wallSizeVal.value));
-        int maxH = Mathf.RoundToInt(Random.Range(8, Mathf.Pow(int.Parse(inpMapSize.text), 0.65f) * wallSizeVal.value)); ;
+        int maxH = Mathf.RoundToInt(Random.Range(8, Mathf.Pow(int.Parse(inpMapSize.text), 0.65f) * wallSizeVal.value)); //Maximum length and width for a row of wall tiles
         int initW = maxW;
         int initH = maxH;
-        for (int i = 0; i < maxH; i++) //Generation for the 1st quartile
+
+        //Generation for the 1st quartile
+        for (int i = 0; i < maxH; i++) //generate tiles along the y axis
         {
-            maxW = maxW + Random.Range(-1, 1);
-            if (i + initPosy < mapS)
+            maxW = maxW + Random.Range(-1, 1); // As the wall generator runs along the y axis, the maximum width will either stay the same for the row or reduce by 1
+            if (i + initPosy < mapS) //Make sure tiles are within map boundaries (y axis)
             {
-                for (int o = 0; o < maxW; o++)
+                for (int o = 0; o < maxW; o++) //Generate tiles along the x axis
                 {
-                    if (o + initPosx < mapS)
+                    if (o + initPosx < mapS) //Ensure tiles are within map boundaries (x axis)
                     {
-                        wallMap.SetTile(new Vector3Int(initPosx + o, initPosy + i, 1), wallTile);
+                        wallMap.SetTile(new Vector3Int(initPosx + o, initPosy + i, 1), wallTile); //Spawn a tile at given position
                     }
                 }
             }  
